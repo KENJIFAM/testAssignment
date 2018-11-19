@@ -3,7 +3,7 @@ var app = require('./app');
 var OrdersController = require('./app/controllers/ordersController');
 
 
-app.use('/orders', OrdersController);
+app.use('/', OrdersController);
 
 var port = 3000;
 

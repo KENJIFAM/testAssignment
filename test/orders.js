@@ -8,6 +8,8 @@ var should = chai.should();
 
 chai.use(chaiHttp);
 
+let id;
+
 describe('/GET orders', () => {
   it('it should GET all orders', (done) => {
     chai.request(server)
@@ -23,17 +25,58 @@ describe('/GET orders', () => {
 
 /* Once required functionality is imiplemented,
 ** create corresponding tests
-*/ 
-
-/***** test GET /order/:id *****/
-
-//your test goes here
+*/
 
 /***** test POST /order/ *****/
 
-//your test goes here
+describe('/POST order', () => {
+  it('it should POST an order', (done) => {
+    chai.request(server)
+        .post('/orders')
+        .set('content-type', 'application/json')
+        .send({
+          customer: "testtttttttttttttttttttttttt",
+          date: "2018-07-29T00:17:12.000Z",
+          isDelivered: true,
+          value: 668,
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.not.be.empty;
+          id = res.body._id;
+          done();
+        });
+  });
+});
 
+
+/***** test GET /order/:id *****/
+
+describe('/GET orders by id', () => {
+  it('it should GET an order by id', (done) => {
+    chai.request(server)
+        .get('/orders/' + id)
+        .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.not.be.empty;
+          done();
+        });
+  });
+});
 
 /***** test DELETE /order/:id *****/
 
-//your test goes here
+describe('/DELETE orders by id', () => {
+  it('it should DELETE an order by id', (done) => {
+    chai.request(server)
+        .delete('/orders/' + id)
+        .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.not.be.empty;
+          done();
+        });
+  });
+});

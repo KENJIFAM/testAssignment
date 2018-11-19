@@ -1,24 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <script src="/js/main.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script defer type="module" src="/js/main.js"></script>
 
-    <title>Orders</title>
+  <title>Orders</title>
 </head>
 <body>
-    <div class="container">
-      <h1>Orders</h1>
-
-      <table class="table">
-          <thead>
+  <div class="container">
+    <div class="row">
+      <div class="container navbar">
+        <h1 class="float-left">Orders</h1>
+        <button type="button" class="btn btn-outline-secondary float-right new-order" data-toggle="modal" data-target="#newOrder" id="new">+</button>
+        <div class="modal fade" id="newOrder" tabindex="-1" role="dialog" aria-labelledby="newOrderLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="newOrderLabel">Create new order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <p>
+                    * is required
+                  </p>
+                  <div class="alert alert-danger" role="alert" id="alert"></div>
+                  <div class="form-group">
+                    <label for="customer" class="col-form-label">Customer's name: *</label>
+                    <input type="text" class="form-control" id="customer">
+                  </div>
+                  <div class="form-group">
+                    <label for="date" class="col-form-label">Date:</label>
+                    <input type="datetime-local" class="form-control" id="date">
+                  </div>
+                  <div class="form-group">
+                    <label for="isDelivered" class="col-form-label">Is delivered:</label>
+                    <select name="isDelivered" class="form-control" id="isDelivered">
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="value" class="col-form-label">Value:</label>
+                    <input type="number" class="form-control" id="value">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="create">Create</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <select class="form-control col-sm-4 col-md-3 col-xl-2" id="sort">
+        <option value="0">Newest first</option>
+        <option value="1">Oldest first</option>
+        <option value="3">Name A-Z</option>
+        <option value="2">Name Z-A</option>
+        <option value="4">Biggest value first</option>
+        <option value="5">Smallest value first</option>
+      </select>
+    </div>
+    <div class="row">
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="thead-light">
             <tr>
               <th scope="col">id</th>
               <th scope="col">Customer</th>
@@ -27,27 +85,39 @@
               <th scope="col">Value</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
+          <tbody id="table-body"></tbody>
         </table>
+      </div>
+      <div id="modalList"></div>
+      <div class="modal fade" id="singleOrder" tabindex="-1" role="dialog" aria-labelledby="singleOrderLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="singleOrderLabel"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <strong>Date: </strong>
+                    <span id="orderDate"></span>
+                  </div>
+                  <div class="col-sm-12"><strong>Is delivered: </strong><span id="orderIsDelivered"></span></div>
+                  <div class="col-sm-12"><strong>Value: </strong><span id="orderValue"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="delete">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </body>
 </html>
