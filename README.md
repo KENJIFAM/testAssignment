@@ -8,4 +8,9 @@ To run dev environment <b>npm run dev</b> <br/>
 
 To run tests <b>npm test</b>
 
-To connect to database enter your credentials in connection string 
+To connect to database enter your credentials in connection string
+
+# Demo
+
+https://test-assignment-orders.firebaseapp.com/ <br/>
+(go to <b>firebase</b> branch to see setup for firebase deployment)
