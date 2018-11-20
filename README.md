@@ -1,11 +1,19 @@
 # TestAssignment
 
+Preparation for Firebase deployment.
+
+Install Firebase CLI <b>npm install -g firebase-tools</b> and login with <b>firebase login</b> <br/>
+Then <b>cd functions</b> <br/>
 To install dependencies run <b>npm install</b>
 
-To run dev environment <b>npm run dev</b> <br/>
-<b> localhost:3000</b> html boilerplate.<br/>
-<b>localhost:3000/orders </b> to get list of orders<br/>
+To serve app, from root folder <b>firebase serve --only functions,hosting</b> <br/>
+<b>localhost:5000</b><br/>
+<b>localhost:5000/orders</b> to get list of orders<br/>
 
-To run tests <b>npm test</b>
+To deploy <b>firebase deploy</b>
 
-To connect to database enter your credentials in connection string 
+To connect to database enter your mongodb database credentials in dbConfig
+
+# Demo
+
+https://test-assignment-orders.firebaseapp.com/
